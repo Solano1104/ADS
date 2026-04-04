@@ -1,0 +1,15 @@
+INSERT INTO alunos
+(nome, data_de_nasc, cidade, uf, status)
+
+VALUES
+('João Pedro', '11/04/2007', 'Sinop', 'MT', '1'),
+
+UPDATE alunos set 
+nome = 'João Pedero Solano',
+cidade = 'Colider'
+WHERE(id = 1)
+
+DELETE FROM alunos 
+WHERE(id = 2)
+
+select * from alunos
