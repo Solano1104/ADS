@@ -1,0 +1,14 @@
+# IntelliJ
+/.idea
+*.iml
+
+# Build outputs
+/build
+/out
+
+# SQLite database file
+*.db
+
+# OS files
+Thumbs.db
+.DS_Store
