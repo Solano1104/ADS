@@ -1,0 +1,90 @@
+relatório de vendas por cliente
+SELECT 
+    c.nome_cliente,
+    c.tipo_pessoa,
+    COUNT(v.id_venda) AS quantidade_vendas,
+    SUM(v.valor_total) AS total_gasto
+FROM vendas v
+JOIN clientes c 
+    ON v.id_cliente = c.id_cliente
+WHERE v.status_venda = 'concluida'
+  AND v.valor_total > 0
+GROUP BY c.id_cliente, c.nome_cliente, c.tipo_pessoa
+ORDER BY total_gasto;
+
+relatório vendas por funcionário
+
+SELECT 
+    f.nome_funcionario,
+    f.cargo,
+    COUNT(v.id_venda) AS quantidade_vendas,
+    SUM(v.valor_total) AS total_vendido
+FROM vendas v
+JOIN funcionarios f 
+    ON v.id_funcionario = f.id_funcionario
+WHERE f.cargo = 'Vendedor'
+   OR f.cargo = 'Vendedora'
+GROUP BY f.id_funcionario, f.nome_funcionario, f.cargo
+ORDER BY total_vendido;
+
+relatório produtos vendidos
+
+ SELECT 
+    p.id_produto,
+    p.id_categoria,
+    COUNT(vi.id_venda_item) AS vezes_vendido,
+    SUM(vi.quantidade) AS quantidade_total_vendida,
+    SUM(vi.quantidade * vi.preco_unitario) AS valor_total_vendido
+FROM vendas_itens vi
+JOIN vendas v 
+    ON vi.id_venda = v.id_venda
+JOIN produtos p 
+    ON vi.id_produto = p.id_produto
+WHERE v.status_venda = 'concluida'
+  AND vi.quantidade > 0
+GROUP BY p.id_produto, p.id_categoria
+ORDER BY quantidade_total_vendida;
+
+relatórios compras por fornecedor 
+
+SELECT 
+    f.razao_social,
+    f.cnpj,
+    f.cidade_uf,
+    COUNT(c.id_compra) AS quantidade_compras,
+    SUM(c.valor_total) AS total_comprado
+FROM compras c
+JOIN fornecedores f 
+    ON c.id_fornecedor = f.id_fornecedor
+WHERE c.status_compra = 'concluida'
+   OR c.status_compra = 'pendente'
+GROUP BY f.id_fornecedor, f.razao_social, f.cnpj, f.cidade_uf
+ORDER BY total_comprado;
+
+retório financeiro geral
+
+SELECT 
+    'TOTAL DE VENDAS CONCLUÍDAS' AS tipo_movimento,
+    SUM(valor_total) AS valor_total
+FROM vendas
+WHERE status_venda = 'concluida'
+UNION ALL
+SELECT 
+    'TOTAL DE COMPRAS CONCLUÍDAS' AS tipo_movimento,
+    SUM(valor_total) AS valor_total
+FROM compras
+WHERE status_compra = 'concluida'
+UNION ALL
+SELECT 
+    'TOTAL DE VENDAS PENDENTES' AS tipo_movimento,
+    SUM(valor_total) AS valor_total
+FROM vendas
+WHERE status_venda = 'pendente'
+
+UNION ALL
+
+SELECT 
+    'TOTAL DE COMPRAS PENDENTES' AS tipo_movimento,
+    SUM(valor_total) AS valor_total
+FROM compras
+WHERE status_compra = 'pendente';

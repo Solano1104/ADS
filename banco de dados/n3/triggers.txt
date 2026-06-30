@@ -1,0 +1,17 @@
+1_
+CREATE TRIGGER aumentar_estoque
+AFTER INSERT ON compras_itens
+BEGIN
+    UPDATE produtos
+    SET quantidade_estoque = quantidade_estoque + NEW.quantidade
+    WHERE id_produto = NEW.id_produto;
+END;
+
+2_
+CREATE TRIGGER diminuir_estoque
+AFTER INSERT ON vendas_itens
+BEGIN
+    UPDATE produtos
+    SET quantidade_estoque = quantidade_estoque - NEW.quantidade
+    WHERE id_produto = NEW.id_produto;
+END;
