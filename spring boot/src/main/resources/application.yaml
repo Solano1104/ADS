@@ -1,3 +1,6 @@
 spring:
   application:
     name: PO2
+    url: 'sqlLite//app.db'
+  flyway:
+    enable: false
